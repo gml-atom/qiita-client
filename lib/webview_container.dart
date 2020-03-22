@@ -13,6 +13,7 @@ class _WebViewContainerState extends State<WebViewContainer> {
   _WebViewContainerState(this._url);
   @override
   Widget build(BuildContext context) {
+    print(_url);
     return Scaffold(
         appBar: AppBar(),
         body: Column(
@@ -20,9 +21,10 @@ class _WebViewContainerState extends State<WebViewContainer> {
             Expanded(
                 child: WebView(
                     key: _key,
-//                    javascriptMode: JavascriptMode.unrestricted,
-//                    initialUrl: _url)
-                    ))
+                    initialUrl: _url,
+                    javascriptMode: JavascriptMode.unrestricted,
+                ),
+                    )
           ],
         ));
   }
