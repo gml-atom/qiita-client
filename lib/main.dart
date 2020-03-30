@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'view/top.dart';
 import 'view/trend.dart';
+import 'view/tag.dart';
 
 void main() => runApp(MyApp());
 
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
             children: [
               new TopTab('top'),
               new TrendTab('test'),
-              Icon(Icons.directions_car)
+              new TagTab(),
             ],
           ),
         ),

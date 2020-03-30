@@ -54,15 +54,15 @@ class _TrendTabState extends State<TrendTab> {
                           ),
                           child: ListTile(
                             title: Text(item.title),
-                            subtitle: Text(item.links.first.href),
-//                            subtitle: Text('公開日： ' + parseDate(item.published)),
+                            subtitle: Text('公開日： ' + parseDate(item.published)),
                             contentPadding: EdgeInsets.all(8.0),
                             onTap: () async {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
+//                                      builder: (context) => WebViewContainer("https://yahoo.co.jp")
                                       builder: (context) => WebViewContainer(item.links.first.href)
-                                  ));
+                                      ));
                             },
                           )
                           );
