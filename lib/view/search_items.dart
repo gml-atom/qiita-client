@@ -9,7 +9,10 @@ import '../data/items_api_service.dart';
 import 'single_post_page.dart';
 import 'webview_container.dart';
 
-class ItemsTab extends StatelessWidget {
+class SearchItems extends StatelessWidget {
+  final String searchString;
+  SearchItems(this.searchString);
+
   @override
   Widget build(BuildContext context) {
 //    return MaterialApp(
@@ -21,7 +24,7 @@ class ItemsTab extends StatelessWidget {
         create: (_) => ItemsApiService.create(),
         // Always call dispose on the ChopperClient to release resources
         dispose: (context, ItemsApiService service) => service.client.dispose(),
-        child: Itemlist());
+        child: Itemlist(searchString));
 //        child: MaterialApp(
 ////          home: _buildBody(context),
 //          home: Itemlist(),
@@ -30,9 +33,16 @@ class ItemsTab extends StatelessWidget {
 }
 
 class Itemlist extends StatelessWidget {
+  bool _iconState = false;
+  final String searchString;
+  Itemlist(this.searchString);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('検索結果 : ' + searchString),
+      ),
       body: _buildBody(context),
     );
   }
@@ -43,15 +53,17 @@ class Itemlist extends StatelessWidget {
     return FutureBuilder<Response>(
       // In real apps, use some sort of state management (BLoC is cool)
       // to prevent duplicate requests when the UI rebuilds
-      future: Provider.of<ItemsApiService>(context).getPosts(),
+      future:
+          Provider.of<ItemsApiService>(context).getSearchPosts(searchString),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          // Snapshot's data is the Response
-          // You can see there's no type safety here (only List<dynamic>)
-          final List posts = json.decode(snapshot.data.bodyString);
-          return _buildPosts(context, posts);
+          if (snapshot.data.bodyString.length > 2) {
+            final List posts = json.decode(snapshot.data.bodyString);
+            return _buildPosts(context, posts);
+          } else {
+            return Text('No data');
+          }
         } else {
-          // Show a loading indicator while waiting for the posts
           return Center(
             child: CircularProgressIndicator(),
           );

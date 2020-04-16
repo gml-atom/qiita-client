@@ -8,10 +8,11 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../data/items_api_service.dart';
 import 'single_post_page.dart';
 import 'webview_container.dart';
+import '../models.dart';
 
-class SearchItems extends StatelessWidget {
+class SearchTagItems extends StatelessWidget {
   final String searchString;
-  SearchItems(this.searchString);
+  SearchTagItems(this.searchString);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,10 @@ class Itemlist extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('検索結果 : ' + searchString),
+        title: Text('検索結果 : #' + searchString),
+        actions: <Widget>[
+          bookmartIcon(searchString),
+        ],
       ),
       body: _buildBody(context),
     );
@@ -53,14 +57,15 @@ class Itemlist extends StatelessWidget {
     return FutureBuilder<Response>(
       // In real apps, use some sort of state management (BLoC is cool)
       // to prevent duplicate requests when the UI rebuilds
-      future:
-          Provider.of<ItemsApiService>(context).getSearchPosts(searchString),
+      future: Provider.of<ItemsApiService>(context).getTagPosts(searchString),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          // Snapshot's data is the Response
-          // You can see there's no type safety here (only List<dynamic>)
-          final List posts = json.decode(snapshot.data.bodyString);
-          return _buildPosts(context, posts);
+          if (snapshot.data.error == null) {
+            final List posts = json.decode(snapshot.data.bodyString);
+            return _buildPosts(context, posts);
+          } else {
+            return Text('No data');
+          }
         } else {
           // Show a loading indicator while waiting for the posts
           return Center(
@@ -114,5 +119,80 @@ class Itemlist extends StatelessWidget {
     var formatter = new DateFormat('yyyy/MM/dd(E) HH:mm', "ja_JP");
     var formatted = formatter.format(parsedDate);
     return formatted;
+  }
+}
+
+class bookmartIcon extends StatefulWidget {
+  final String searchString;
+  bookmartIcon(this.searchString);
+
+  @override
+  createState() => _bookmartIcon(searchString);
+}
+
+class _bookmartIcon extends State<bookmartIcon> {
+  bool _iconState = false;
+  final String searchString;
+  _bookmartIcon(this.searchString);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    isBookmark();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _Icon();
+  }
+
+  IconButton _Icon() {
+    if (_iconState) {
+      return IconButton(
+        icon: Icon(
+          Icons.bookmark,
+          color: Colors.white,
+        ),
+        tooltip: 'ブックマークから削除',
+        onPressed: saveButtonPressed,
+      );
+    } else {
+      return IconButton(
+        icon: Icon(
+          Icons.bookmark_border,
+          color: Colors.white,
+        ),
+        tooltip: 'ブックマークに追加',
+        onPressed: saveButtonPressed,
+      );
+    }
+  }
+
+  Future<void> isBookmark() async {
+    var bookmarlList =
+        await Fav().select().title.equals("#" + searchString).toList();
+    if (bookmarlList.length > 0) {
+      setState(() {
+        _iconState = true;
+      });
+    }
+  }
+
+  void saveButtonPressed() {
+    if (!_iconState) {
+      Fav(
+        title: "#" + searchString,
+        type: "tag",
+        create_at: DateTime.now(),
+      ).save();
+    } else {
+      Fav().select().title.equals("#" + searchString).delete();
+    }
+    setState(() {
+      _iconState = !_iconState;
+    });
+
+    return;
   }
 }

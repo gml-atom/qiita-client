@@ -1,35 +1,35 @@
 import 'package:chopper/chopper.dart';
 
-part 'tag_api_service.chopper.dart';
+part 'items_api_service.chopper.dart';
 
 @ChopperApi(baseUrl: '/v2')
-abstract class TagApiService extends ChopperService {
-  @Get(path: "/tags?sort=count")
-  Future<Response> getPosts(
-//      {
-////        @Query('page[number]') int pageNumber = 1,
-////      @Query('per_page[aaa]') int per_page = 20,
-//      @Query('sort[count]') String sort = "count"}
-      );
+abstract class ItemsApiService extends ChopperService {
+  @Get(path: "/items?per_page=50")
+  Future<Response> getPosts();
 
-  @Get(path: '/tags/{id}')
-  // Query parameters are specified the same way as @Path
-  // but obviously with a @Query annotation
-  Future<Response> getPost(@Path('id') String id);
+  @Get(path: "/items?query={str}&per_page=50")
+  Future<Response> getSearchPosts(
+    @Path('str') String str,
+  );
 
-  static TagApiService create() {
+  @Get(path: "/tags/{tag}/items?per_page=50")
+  Future<Response> getTagPosts(
+    @Path('tag') String str,
+  );
+
+  static ItemsApiService create() {
     final client = ChopperClient(
       // The first part of the URL is now here
       baseUrl: 'https://qiita.com/api',
       services: [
         // The generated implementation
-        _$TagApiService(),
+        _$ItemsApiService(),
       ],
       // Converts data to & from JSON and adds the application/json header.
       converter: JsonConverter(),
     );
 
     // The generated class with the ChopperClient passed in
-    return _$TagApiService(client);
+    return _$ItemsApiService(client);
   }
 }

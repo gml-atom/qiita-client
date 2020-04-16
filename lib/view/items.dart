@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:chopper/chopper.dart';
 import 'package:provider/provider.dart';
-
-import '../data/tag_api_service.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import '../data/items_api_service.dart';
 import 'single_post_page.dart';
+import 'webview_container.dart';
 
-class TagTab extends StatelessWidget {
+class ItemsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 //    return MaterialApp(
@@ -16,17 +18,19 @@ class TagTab extends StatelessWidget {
 //    );
 
     return Provider(
-        create: (_) => TagApiService.create(),
+        create: (_) => ItemsApiService.create(),
         // Always call dispose on the ChopperClient to release resources
-        dispose: (context, TagApiService service) => service.client.dispose(),
-        child: MaterialApp(
-//          home: _buildBody(context),
-          home: Taglist(),
-        ));
+        dispose: (context, ItemsApiService service) => service.client.dispose(),
+        child: Itemlist());
+//        child: MaterialApp(
+////          home: _buildBody(context),
+//          home: Itemlist(),
+//        ));
   }
 }
 
-class Taglist extends StatelessWidget {
+class Itemlist extends StatelessWidget {
+  int page = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +44,8 @@ class Taglist extends StatelessWidget {
     return FutureBuilder<Response>(
       // In real apps, use some sort of state management (BLoC is cool)
       // to prevent duplicate requests when the UI rebuilds
-      future: Provider.of<TagApiService>(context).getPosts(),
+      future: Provider.of<ItemsApiService>(context).getPosts(),
+//      future: _aaa(context),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           // Snapshot's data is the Response
@@ -57,32 +62,43 @@ class Taglist extends StatelessWidget {
     );
   }
 
+//  _aaa(BuildContext context) {
+//    return Provider.of<ItemsApiService>(context).getPosts();
+//  }
+
   ListView _buildPosts(BuildContext context, List posts) {
     return ListView.builder(
       itemCount: posts.length,
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(2),
       itemBuilder: (context, index) {
         return Card(
           elevation: 4,
           child: ListTile(
             title: Text(
-              posts[index]['id'],
+              posts[index]['title'],
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            subtitle: Text(posts[index]['id']),
-            onTap: () => _navigateToPost(context, posts[index]['id']),
+            subtitle: Text('公開日： ' + parseDate(posts[index]['created_at'])),
+            onTap: () async {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WebViewContainer(
+                          posts[index]['url'], posts[index]['title'])));
+            },
+//            onTap: () => _navigateToPost(context, posts[index]['id']),
           ),
         );
       },
     );
   }
 
-  void _navigateToPost(BuildContext context, String id) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-//        builder: (context) => SinglePostPage(postId: id),
-        builder: (context) => SinglePostPage(postId: id),
-      ),
-    );
+  parseDate(d) {
+    Intl.defaultLocale = 'ja_JP';
+    initializeDateFormatting("ja_JP");
+    DateTime parsedDate = DateTime.parse(d);
+    var formatter = new DateFormat('yyyy/MM/dd(E) HH:mm', "ja_JP");
+    var formatted = formatter.format(parsedDate);
+    return formatted;
   }
 }

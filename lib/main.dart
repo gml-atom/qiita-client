@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'view/top.dart';
+import 'view/bookmark.dart';
 import 'view/trend.dart';
-import 'view/test.dart';
+import 'view/items.dart';
+import 'view/tag.dart';
+import 'models.dart';
+import './view/webview_container.dart';
+import 'view/search_items.dart';
+import 'view/search_tag_items.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,13 +23,20 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => new _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
+class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   List<DynamicTabContent> myList = new List();
 
-  final List<Tab> tabs = <Tab>[
-    Tab(text: 'HOME'),
+  List<Tab> tabs = <Tab>[
+    Tab(text: 'ブックマーク'),
     Tab(text: 'トレンド'),
-    Tab(text: 'タグ一覧'),
+    Tab(text: '新着'),
+  ];
+
+  List<Widget> tabView = <Widget>[
+    new TopTab('top'),
+    new TrendTab('test'),
+//    new TagTab(),
+    new ItemsTab(),
   ];
 
   TabController _tabController;
@@ -33,16 +45,48 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    myList.add(new DynamicTabContent.name("HOME2", new TopTab('top')));
-    myList.add(new DynamicTabContent.name('トレンド2', new TrendTab('test')));
-    myList.add(new DynamicTabContent.name('タグ一覧2', new TopTab('top')));
-    _tabController = TabController(vsync: this, length: tabs.length);
+//    _addDefaultTab();
+    _tabController = getTabController();
+    _tabController.index = 1;
+  }
+
+  void _addTab(String searchText) {
+    setState(() {
+      debugPrint('---------------------');
+      tabs.clear();
+      tabs = <Tab>[
+        Tab(text: 'HOME'),
+        Tab(text: 'トレンド'),
+        Tab(text: 'タグ一覧'),
+        Tab(text: searchText),
+      ];
+//      tabs.add(Tab(text: searchText));
+      tabView.add(new TopTab('top'));
+//      myList.clear();
+//      _addDefaultTab();
+      //_addDefaultTab();
+      debugPrint((_tabController.index).toString());
+//      myList.add(new DynamicTabContent.name(searchText, new TopTab('top')));
+      _tabController = getTabController();
+      _tabController.index = 2;
+      debugPrint((tabs.length).toString());
+      debugPrint((tabView.length).toString());
+//      _tabController.index = tabs.length - 1;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: MyApp.navKey,
+      theme: new ThemeData(
+        primaryColor: Colors.lightGreenAccent[700],
+        // ignore: deprecated_member_use
+        primaryTextTheme: TextTheme(title: TextStyle(color: Colors.white)),
+        primaryIconTheme: const IconThemeData.fallback().copyWith(
+          color: Colors.white,
+        ),
+      ),
       home: DefaultTabController(
         // タブの数
         length: myList.length,
@@ -51,42 +95,56 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.search),
-                tooltip: 'sss',
+                tooltip: '検索',
                 onPressed: buttonPressed,
-//                onPressed: () async {
-//                  Duration date = await showTimerDialog(context: context);
-//                },
               ),
             ],
             bottom: TabBar(
               // タブのオプション
-              isScrollable: true,
-              unselectedLabelColor: Colors.white.withOpacity(0.3),
-              unselectedLabelStyle: TextStyle(fontSize: 12.0),
-              labelColor: Colors.yellowAccent,
+//              isScrollable: true,
+              unselectedLabelColor: Colors.white.withOpacity(0.5),
+              unselectedLabelStyle: TextStyle(fontSize: 14.0),
+              labelColor: Colors.white,
               labelStyle: TextStyle(fontSize: 16.0),
               indicatorColor: Colors.white,
-              indicatorWeight: 2.0,
+              indicatorWeight: 4.0,
               // タブに表示する内容
-              controller: _tabController,
 
-              tabs: myList.map((DynamicTabContent choice) {
-                return Tab(
-                  text: choice.tabTitle,
-                );
-              }).toList(),
+              controller: _tabController,
+              tabs: tabs,
+//              tabs: getWidgets(),
+
+//              tabs: myList.map((DynamicTabContent choice) {
+//                return Tab(
+//                  text: choice.tabTitle,
+//                );
+//              }).toList(),
             ),
             title: Text('見るだけ！ Qiita Client '),
           ),
           body: TabBarView(
             // 各タブの内容
             controller: _tabController,
-            children:
-                myList.map((DynamicTabContent choice) => choice.view).toList(),
+
+            children: tabView,
+//                myList.map((DynamicTabContent choice) => choice.view).toList(),
           ),
         ),
       ),
     );
+  }
+
+  List<Widget> getWidgets() {
+    return myList.map((DynamicTabContent choice) {
+      return Tab(
+        text: choice.tabTitle,
+      );
+    }).toList();
+  }
+
+  TabController getTabController() {
+    return TabController(length: tabs.length, vsync: this);
+//      ..addListener(_updatePage);
   }
 
   void buttonPressed() {
@@ -96,14 +154,11 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('サンプルダイアログ'),
+          title: Text('検索\n#タグ名 でタグ検索'),
           content: TextField(
             controller: searchTextController,
-            decoration: InputDecoration(
-              hintText: "sec",
-            ),
+            decoration: InputDecoration(),
             autofocus: true,
-            keyboardType: TextInputType.number,
           ),
           actions: <Widget>[
             FlatButton(
@@ -112,12 +167,33 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             ),
             FlatButton(
               child: Text("OK"),
+              onPressed: () async {
+                if (searchTextController.text.startsWith('#')) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SearchTagItems(searchTextController.text.substring(
+                              1,
+                            ))),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SearchItems(searchTextController.text)),
+                  );
+                }
+              },
+//              onPressed: () => Fav(title: searchTextController.text).save(),
 //              onPressed: () => Navigator.pop(context),
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-//                                      builder: (context) => WebViewContainer("https://yahoo.co.jp")
-                      builder: (context) => TestTab("aaaa"))),
+//              onPressed: () => Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+////                                      builder: (context) => WebViewContainer("https://yahoo.co.jp")
+//                      builder: (context) =>
+//                          TestTab(searchTextController.text))),
             ),
           ],
         );

@@ -12,7 +12,7 @@ abstract class TagApiService extends ChopperService {
 //      @Query('sort[count]') String sort = "count"}
       );
 
-  @Get(path: '/tags/{id}')
+  @Get(path: '/tags/{id}/items?&per_page=50')
   // Query parameters are specified the same way as @Path
   // but obviously with a @Query annotation
   Future<Response> getPost(@Path('id') String id);
