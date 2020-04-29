@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "29151598049",
+    "firebase_url": "https://qiita-client-app.firebaseio.com",
+    "project_id": "qiita-client-app",
+    "storage_bucket": "qiita-client-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29151598049:android:1302c6090101ab80ad6ea0",
+        "android_client_info": {
+          "package_name": "jp.lightfull.qiitaclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "29151598049-og5tevgpobukmdjmfju3338lvouu2llj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLcoXpwM0kHkm8qBOxJ859KRlmwCQBrqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "29151598049-og5tevgpobukmdjmfju3338lvouu2llj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
