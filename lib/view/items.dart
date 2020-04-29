@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../data/items_api_service.dart';
-import 'single_post_page.dart';
 import 'webview_container.dart';
 
 class ItemsTab extends StatelessWidget {

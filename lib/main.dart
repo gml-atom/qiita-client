@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'view/bookmark.dart';
 import 'view/trend.dart';
 import 'view/items.dart';
-import 'view/tag.dart';
 import 'models.dart';
 import './view/webview_container.dart';
 import 'view/search_items.dart';

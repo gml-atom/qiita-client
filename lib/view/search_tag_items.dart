@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../data/items_api_service.dart';
-import 'single_post_page.dart';
 import 'webview_container.dart';
 import '../models.dart';
 
@@ -100,15 +99,6 @@ class Itemlist extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  void _navigateToPost(BuildContext context, String id) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-//        builder: (context) => SinglePostPage(postId: id),
-        builder: (context) => SinglePostPage(postId: id),
-      ),
     );
   }
 

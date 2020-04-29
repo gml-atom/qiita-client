@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../models.dart';
+import 'package:share/share.dart';
 
 class WebViewContainer extends StatefulWidget {
   final url;
@@ -27,11 +28,17 @@ class _WebViewContainerState extends State<WebViewContainer> {
 
   @override
   Widget build(BuildContext context) {
-    print(_url);
     return Scaffold(
         appBar: AppBar(
           title: Text(_title),
-          actions: <Widget>[_bookmarkIcon()],
+          actions: <Widget>[
+            _bookmarkIcon(),
+            IconButton(
+                icon: Icon(Icons.share),
+                onPressed: () {
+                  Share.share(_url);
+                }),
+          ],
         ),
         body: Column(
           children: [
