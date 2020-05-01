@@ -52,7 +52,7 @@ class _TopTabState extends State<TopTab> {
                 }).toList(),
               );
             } else {
-              return Text('No data');
+              return Text('まだブックマークされた記事、タグはありません。');
             }
           } else {
             return Text('wait');
