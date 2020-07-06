@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import '../models.dart';
+import '../model/models.dart';
+import '../model/history_models.dart';
 import 'package:share/share.dart';
 
 class WebViewContainer extends StatefulWidget {
@@ -23,6 +24,7 @@ class _WebViewContainerState extends State<WebViewContainer> {
   void initState() {
     // TODO: implement initState
     isBookmark();
+    addHistory();
     super.initState();
   }
 
@@ -98,5 +100,20 @@ class _WebViewContainerState extends State<WebViewContainer> {
       _iconState = !_iconState;
     });
     return;
+  }
+
+  void addHistory() async{
+    var historyList = await History().select().url.equals(_url).toList();
+    if (historyList.length > 0) {
+      int num = historyList[0].num + 1;
+      History(id: historyList[0].id, create_at: DateTime.now(), num: num ).save();
+    }else {
+      History(
+        title: _title,
+        url: _url,
+        num: 1,
+        create_at: DateTime.now(),
+      ).save();
+    }
   }
 }

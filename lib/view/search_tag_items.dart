@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../data/items_api_service.dart';
 import 'webview_container.dart';
-import '../models.dart';
+import '../model/models.dart';
 
 class SearchTagItems extends StatelessWidget {
   final String searchString;

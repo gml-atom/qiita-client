@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'view/bookmark.dart';
 import 'view/trend.dart';
 import 'view/items.dart';
-import 'models.dart';
+import 'model/history_models.dart';
 import './view/webview_container.dart';
 import 'view/search_items.dart';
 import 'view/search_tag_items.dart';
+import 'view/history.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -28,14 +30,15 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   List<Tab> tabs = <Tab>[
     Tab(text: 'ブックマーク'),
     Tab(text: 'トレンド'),
-    Tab(text: '新着'),
+    Tab(text: '新着記事'),
+    Tab(text: '閲覧履歴'),
   ];
 
   List<Widget> tabView = <Widget>[
     new TopTab('top'),
     new TrendTab('test'),
-//    new TagTab(),
     new ItemsTab(),
+    new HistoryTab(),
   ];
 
   TabController _tabController;
@@ -47,31 +50,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 //    _addDefaultTab();
     _tabController = getTabController();
     _tabController.index = 1;
-  }
+    _historyClean();
 
-  void _addTab(String searchText) {
-    setState(() {
-      debugPrint('---------------------');
-      tabs.clear();
-      tabs = <Tab>[
-        Tab(text: 'HOME'),
-        Tab(text: 'トレンド'),
-        Tab(text: 'タグ一覧'),
-        Tab(text: searchText),
-      ];
-//      tabs.add(Tab(text: searchText));
-      tabView.add(new TopTab('top'));
-//      myList.clear();
-//      _addDefaultTab();
-      //_addDefaultTab();
-      debugPrint((_tabController.index).toString());
-//      myList.add(new DynamicTabContent.name(searchText, new TopTab('top')));
-      _tabController = getTabController();
-      _tabController.index = 2;
-      debugPrint((tabs.length).toString());
-      debugPrint((tabView.length).toString());
-//      _tabController.index = tabs.length - 1;
-    });
   }
 
   @override
@@ -100,13 +80,14 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
             ],
             bottom: TabBar(
               // タブのオプション
-//              isScrollable: true,
+              isScrollable: true,
               unselectedLabelColor: Colors.white.withOpacity(0.5),
-              unselectedLabelStyle: TextStyle(fontSize: 14.0),
+              unselectedLabelStyle: TextStyle(fontSize: 12.0),
               labelColor: Colors.white,
               labelStyle: TextStyle(fontSize: 16.0),
               indicatorColor: Colors.white,
               indicatorWeight: 4.0,
+//              isScrollable: true,
               // タブに表示する内容
 
               controller: _tabController,
@@ -198,5 +179,9 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
         );
       },
     );
+  }
+
+  void _historyClean() async{
+    final result = await History().select().create_at.lessThan(DateTime.now().subtract(new Duration(hours: 240))).delete();
   }
 }

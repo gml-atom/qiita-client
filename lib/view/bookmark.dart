@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models.dart';
+import '../model/models.dart';
 import 'webview_container.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'models.dart';
+part of 'history_models.dart';
 
 // **************************************************************************
 // SqfEntityGenerator
@@ -12,18 +12,19 @@ part of 'models.dart';
 
 //  To use these SqfEntity classes do following:
 //  - import model.dart into where to use
-//  - start typing ex:Fav.select()... (add a few filters with fluent methods)...(add orderBy/orderBydesc if you want)...
+//  - start typing ex:History.select()... (add a few filters with fluent methods)...(add orderBy/orderBydesc if you want)...
 //  - and then just put end of filters / or end of only select()  toSingle() / or toList()
 //  - you can select one or return List<yourObject> by your filters and orders
 //  - also you can batch update or batch delete by using delete/update methods instead of tosingle/tolist methods
 //    Enjoy.. Huseyin Tokpunar
 
+// ignore_for_file:
 // BEGIN TABLES
-// Fav TABLE
-class TableFav extends SqfEntityTableBase {
-  TableFav() {
+// History TABLE
+class TableHistory extends SqfEntityTableBase {
+  TableHistory() {
     // declare properties of EntityTable
-    tableName = 'fav';
+    tableName = 'history';
     primaryKeyName = 'id';
     primaryKeyType = PrimaryKeyType.integer_auto_incremental;
     useSoftDeleting = true;
@@ -31,30 +32,32 @@ class TableFav extends SqfEntityTableBase {
 
     // declare fields
     fields = [
-      SqfEntityFieldBase('type', DbType.text),
-      SqfEntityFieldBase('title', DbType.text),
-      SqfEntityFieldBase('tag', DbType.text),
-      SqfEntityFieldBase('url', DbType.text),
-      SqfEntityFieldBase('create_at', DbType.datetime),
+      SqfEntityFieldBase('title', DbType.text, isNotNull: false),
+      SqfEntityFieldBase('url', DbType.text, isNotNull: false),
+      SqfEntityFieldBase('num', DbType.integer, isNotNull: false),
+      SqfEntityFieldBase('create_at', DbType.datetime,
+          isNotNull: false, minValue: DateTime.parse('1900-01-01')),
     ];
     super.init();
   }
   static SqfEntityTableBase _instance;
   static SqfEntityTableBase get getInstance {
-    return _instance = _instance ?? TableFav();
+    return _instance = _instance ?? TableHistory();
   }
 }
 // END TABLES
 
 // BEGIN DATABASE MODEL
-class FavoriteDbModel extends SqfEntityModelProvider {
-  FavoriteDbModel() {
-    databaseName = favoriteDbModel.databaseName;
+class HistoryDbModel extends SqfEntityModelProvider {
+  HistoryDbModel() {
+    databaseName = historyDbModel.databaseName;
+    password = historyDbModel.password;
+    dbVersion = historyDbModel.dbVersion;
     databaseTables = [
-      TableFav.getInstance,
+      TableHistory.getInstance,
     ];
 
-    bundledDatabasePath = favoriteDbModel
+    bundledDatabasePath = historyDbModel
         .bundledDatabasePath; //'assets/sample.db'; // This value is optional. When bundledDatabasePath is empty then EntityBase creats a new database when initializing the database
   }
   Map<String, dynamic> getControllers() {
@@ -66,59 +69,65 @@ class FavoriteDbModel extends SqfEntityModelProvider {
 // END DATABASE MODEL
 
 // BEGIN ENTITIES
-// region Fav
-class Fav {
-  Fav(
+// region History
+class History {
+  History(
       {this.id,
-      this.type,
       this.title,
-      this.tag,
       this.url,
+      this.num,
       this.create_at,
       this.isDeleted}) {
     _setDefaultValues();
   }
-  Fav.withFields(this.type, this.title, this.tag, this.url, this.create_at,
-      this.isDeleted) {
+  History.withFields(
+      this.title, this.url, this.num, this.create_at, this.isDeleted) {
     _setDefaultValues();
   }
-  Fav.withId(id, this.type, this.title, this.tag, this.url, this.create_at,
-      this.isDeleted) {
+  History.withId(
+      this.id, this.title, this.url, this.num, this.create_at, this.isDeleted) {
     _setDefaultValues();
   }
-  Fav.fromMap(Map<String, dynamic> o) {
-    _setDefaultValues();
+  History.fromMap(Map<String, dynamic> o, {bool setDefaultValues = true}) {
+    if (setDefaultValues) {
+      _setDefaultValues();
+    }
     id = int.tryParse(o['id'].toString());
-    if (o['type'] != null) type = o['type'] as String;
-    if (o['title'] != null) title = o['title'] as String;
-    if (o['tag'] != null) tag = o['tag'] as String;
-    if (o['url'] != null) url = o['url'] as String;
-    if (o['create_at'] != null)
+    if (o['title'] != null) {
+      title = o['title'] as String;
+    }
+    if (o['url'] != null) {
+      url = o['url'] as String;
+    }
+    if (o['num'] != null) {
+      num = int.tryParse(o['num'].toString());
+    }
+    if (o['create_at'] != null) {
       create_at = int.tryParse(o['create_at'].toString()) != null
           ? DateTime.fromMillisecondsSinceEpoch(
               int.tryParse(o['create_at'].toString()))
           : DateTime.tryParse(o['create_at'].toString());
+    }
     isDeleted = o['isDeleted'] != null
         ? o['isDeleted'] == 1 || o['isDeleted'] == true
         : null;
   }
-  // FIELDS (Fav)
+  // FIELDS (History)
   int id;
-  String type;
   String title;
-  String tag;
   String url;
+  int num;
   DateTime create_at;
   bool isDeleted;
 
   BoolResult saveResult;
-  // end FIELDS (Fav)
+  // end FIELDS (History)
 
   static const bool _softDeleteActivated = true;
-  FavManager __mnFav;
+  HistoryManager __mnHistory;
 
-  FavManager get _mnFav {
-    return __mnFav = __mnFav ?? FavManager();
+  HistoryManager get _mnHistory {
+    return __mnHistory = __mnHistory ?? HistoryManager();
   }
 
   // METHODS
@@ -128,20 +137,16 @@ class Fav {
     if (id != null) {
       map['id'] = id;
     }
-    if (type != null) {
-      map['type'] = type;
-    }
-
     if (title != null) {
       map['title'] = title;
     }
 
-    if (tag != null) {
-      map['tag'] = tag;
-    }
-
     if (url != null) {
       map['url'] = url;
+    }
+
+    if (num != null) {
+      map['num'] = num;
     }
 
     if (create_at != null) {
@@ -157,7 +162,7 @@ class Fav {
     return map;
   }
 
-  Future<Map<String, dynamic>> toMapWithChilds(
+  Future<Map<String, dynamic>> toMapWithChildren(
       [bool forQuery = false,
       bool forJson = false,
       bool forView = false]) async {
@@ -165,20 +170,16 @@ class Fav {
     if (id != null) {
       map['id'] = id;
     }
-    if (type != null) {
-      map['type'] = type;
-    }
-
     if (title != null) {
       map['title'] = title;
     }
 
-    if (tag != null) {
-      map['tag'] = tag;
-    }
-
     if (url != null) {
       map['url'] = url;
+    }
+
+    if (num != null) {
+      map['num'] = num;
     }
 
     if (create_at != null) {
@@ -201,15 +202,14 @@ class Fav {
 
   /// This method returns Json String
   Future<String> toJsonWithChilds() async {
-    return json.encode(await toMapWithChilds(false, true));
+    return json.encode(await toMapWithChildren(false, true));
   }
 
   List<dynamic> toArgs() {
     return [
-      type,
       title,
-      tag,
       url,
+      num,
       create_at != null ? create_at.millisecondsSinceEpoch : null,
       isDeleted
     ];
@@ -218,60 +218,56 @@ class Fav {
   List<dynamic> toArgsWithIds() {
     return [
       id,
-      type,
       title,
-      tag,
       url,
+      num,
       create_at != null ? create_at.millisecondsSinceEpoch : null,
       isDeleted
     ];
   }
 
-  static Future<List<Fav>> fromWebUrl(String url) async {
+  static Future<List<History>> fromWebUrl(String url) async {
     try {
       final response = await http.get(url);
       return await fromJson(response.body);
     } catch (e) {
-      print('SQFENTITY ERROR Fav.fromWebUrl: ErrorMessage: ${e.toString()}');
+      print(
+          'SQFENTITY ERROR History.fromWebUrl: ErrorMessage: ${e.toString()}');
       return null;
     }
   }
 
-  static Future<List<Fav>> fromJson(String jsonBody) async {
+  static Future<List<History>> fromJson(String jsonBody) async {
     final Iterable list = await json.decode(jsonBody) as Iterable;
-    var objList = <Fav>[];
+    var objList = <History>[];
     try {
-      objList =
-          list.map((fav) => Fav.fromMap(fav as Map<String, dynamic>)).toList();
+      objList = list
+          .map((history) => History.fromMap(history as Map<String, dynamic>))
+          .toList();
     } catch (e) {
-      print('SQFENTITY ERROR Fav.fromJson: ErrorMessage: ${e.toString()}');
+      print('SQFENTITY ERROR History.fromJson: ErrorMessage: ${e.toString()}');
     }
     return objList;
   }
 
-  /*
-    /// REMOVED AFTER v1.2.1+14 
-    static Future<List<Fav>> fromObjectList(Future<List<dynamic>> o) async {
-      final data = await o;
-      return await Fav.fromMapList(data);
-    } 
-    */
-
-  static Future<List<Fav>> fromMapList(List<dynamic> data,
+  static Future<List<History>> fromMapList(List<dynamic> data,
       {bool preload = false,
       List<String> preloadFields,
       bool loadParents = false,
-      List<String> loadedFields}) async {
-    final List<Fav> objList = <Fav>[];
+      List<String> loadedFields,
+      bool setDefaultValues = true}) async {
+    final List<History> objList = <History>[];
+    loadedFields = loadedFields ?? [];
     for (final map in data) {
-      final obj = Fav.fromMap(map as Map<String, dynamic>);
+      final obj = History.fromMap(map as Map<String, dynamic>,
+          setDefaultValues: setDefaultValues);
 
       objList.add(obj);
     }
     return objList;
   }
 
-  /// returns Fav by ID if exist, otherwise returns null
+  /// returns History by ID if exist, otherwise returns null
   ///
   /// Primary Keys: int id
   ///
@@ -286,8 +282,8 @@ class Fav {
   /// bool loadParents: if true, loads all parent objects until the object has no parent
 
   ///
-  /// <returns>returns Fav if exist, otherwise returns null
-  Future<Fav> getById(int id,
+  /// <returns>returns History if exist, otherwise returns null
+  Future<History> getById(int id,
       {bool preload = false,
       List<String> preloadFields,
       bool loadParents = false,
@@ -295,50 +291,50 @@ class Fav {
     if (id == null) {
       return null;
     }
-    Fav obj;
-    final data = await _mnFav.getById([id]);
+    History obj;
+    final data = await _mnHistory.getById([id]);
     if (data.length != 0) {
-      obj = Fav.fromMap(data[0] as Map<String, dynamic>);
+      obj = History.fromMap(data[0] as Map<String, dynamic>);
     } else {
       obj = null;
     }
     return obj;
   }
 
-  /// Saves the (Fav) object. If the id field is null, saves as a new record and returns new id, if id is not null then updates record
+  /// Saves the (History) object. If the id field is null, saves as a new record and returns new id, if id is not null then updates record
 
   /// <returns>Returns id
   Future<int> save() async {
     if (id == null || id == 0) {
-      id = await _mnFav.insert(this);
+      id = await _mnHistory.insert(this);
     } else {
       // id= await _upsert(); // removed in sqfentity_gen 1.3.0+6
-      await _mnFav.update(this);
+      await _mnHistory.update(this);
     }
 
     return id;
   }
 
-  /// saveAs Fav. Returns a new Primary Key value of Fav
+  /// saveAs History. Returns a new Primary Key value of History
 
-  /// <returns>Returns a new Primary Key value of Fav
+  /// <returns>Returns a new Primary Key value of History
   Future<int> saveAs() async {
     id = null;
 
     return save();
   }
 
-  /// saveAll method saves the sent List<Fav> as a bulk in one transaction
+  /// saveAll method saves the sent List<History> as a bulk in one transaction
   ///
   /// Returns a <List<BoolResult>>
-  Future<List<dynamic>> saveAll(List<Fav> favs) async {
-    // final results = _mnFav.saveAll('INSERT OR REPLACE INTO fav (id,type, title, tag, url, create_at,isDeleted)  VALUES (?,?,?,?,?,?,?)',favs);
+  Future<List<dynamic>> saveAll(List<History> histories) async {
+    // final results = _mnHistory.saveAll('INSERT OR REPLACE INTO history (id,title, url, num, create_at,isDeleted)  VALUES (?,?,?,?,?,?)',histories);
     // return results; removed in sqfentity_gen 1.3.0+6
-    FavoriteDbModel().batchStart();
-    for (final obj in favs) {
+    HistoryDbModel().batchStart();
+    for (final obj in histories) {
       await obj.save();
     }
-    return FavoriteDbModel().batchCommit();
+    return HistoryDbModel().batchCommit();
   }
 
   /// Updates if the record exists, otherwise adds a new row
@@ -346,81 +342,82 @@ class Fav {
   /// <returns>Returns id
   Future<int> upsert() async {
     try {
-      if (await _mnFav.rawInsert(
-              'INSERT OR REPLACE INTO fav (id,type, title, tag, url, create_at,isDeleted)  VALUES (?,?,?,?,?,?,?)',
+      if (await _mnHistory.rawInsert(
+              'INSERT OR REPLACE INTO history (id,title, url, num, create_at,isDeleted)  VALUES (?,?,?,?,?,?)',
               [
                 id,
-                type,
                 title,
-                tag,
                 url,
+                num,
                 create_at != null ? create_at.millisecondsSinceEpoch : null,
                 isDeleted
               ]) ==
           1) {
         saveResult = BoolResult(
-            success: true, successMessage: 'Fav id=$id updated successfully');
+            success: true,
+            successMessage: 'History id=$id updated successfully');
       } else {
         saveResult = BoolResult(
-            success: false, errorMessage: 'Fav id=$id did not update');
+            success: false, errorMessage: 'History id=$id did not update');
       }
       return id;
     } catch (e) {
       saveResult = BoolResult(
           success: false,
-          errorMessage: 'Fav Save failed. Error: ${e.toString()}');
+          errorMessage: 'History Save failed. Error: ${e.toString()}');
       return 0;
     }
   }
 
-  /// inserts or replaces the sent List<<Fav>> as a bulk in one transaction.
+  /// inserts or replaces the sent List<<History>> as a bulk in one transaction.
   ///
   /// upsertAll() method is faster then saveAll() method. upsertAll() should be used when you are sure that the primary key is greater than zero
   ///
   /// Returns a BoolCommitResult
-  Future<BoolCommitResult> upsertAll(List<Fav> favs) async {
-    final results = await _mnFav.rawInsertAll(
-        'INSERT OR REPLACE INTO fav (id,type, title, tag, url, create_at,isDeleted)  VALUES (?,?,?,?,?,?,?)',
-        favs);
+  Future<BoolCommitResult> upsertAll(List<History> histories) async {
+    final results = await _mnHistory.rawInsertAll(
+        'INSERT OR REPLACE INTO history (id,title, url, num, create_at,isDeleted)  VALUES (?,?,?,?,?,?)',
+        histories);
     return results;
   }
 
-  /// Deletes Fav
+  /// Deletes History
 
   /// <returns>BoolResult res.success=Deleted, not res.success=Can not deleted
   Future<BoolResult> delete([bool hardDelete = false]) async {
-    print('SQFENTITIY: delete Fav invoked (id=$id)');
+    print('SQFENTITIY: delete History invoked (id=$id)');
     if (!_softDeleteActivated || hardDelete || isDeleted) {
-      return _mnFav
+      return _mnHistory
           .delete(QueryParams(whereString: 'id=?', whereArguments: [id]));
     } else {
-      return _mnFav.updateBatch(
+      return _mnHistory.updateBatch(
           QueryParams(whereString: 'id=?', whereArguments: [id]),
           {'isDeleted': 1});
     }
   }
 
-  /// Recover Fav>
+  /// Recover History>
 
   /// <returns>BoolResult res.success=Recovered, not res.success=Can not recovered
   Future<BoolResult> recover([bool recoverChilds = true]) async {
-    print('SQFENTITIY: recover Fav invoked (id=$id)');
+    print('SQFENTITIY: recover History invoked (id=$id)');
     {
-      return _mnFav.updateBatch(
+      return _mnHistory.updateBatch(
           QueryParams(whereString: 'id=?', whereArguments: [id]),
           {'isDeleted': 0});
     }
   }
 
-  //private FavFilterBuilder _Select;
-  FavFilterBuilder select({List<String> columnsToSelect, bool getIsDeleted}) {
-    return FavFilterBuilder(this)
+  HistoryFilterBuilder select(
+      {List<String> columnsToSelect, bool getIsDeleted}) {
+    return HistoryFilterBuilder(this)
       .._getIsDeleted = getIsDeleted == true
       ..qparams.selectColumns = columnsToSelect;
   }
 
-  FavFilterBuilder distinct({List<String> columnsToSelect, bool getIsDeleted}) {
-    return FavFilterBuilder(this)
+  HistoryFilterBuilder distinct(
+      {List<String> columnsToSelect, bool getIsDeleted}) {
+    return HistoryFilterBuilder(this)
       .._getIsDeleted = getIsDeleted == true
       ..qparams.selectColumns = columnsToSelect
       ..qparams.distinct = true;
@@ -450,210 +447,210 @@ class Fav {
      */
   // END CUSTOM CODES
 }
-// endregion fav
+// endregion history
 
-// region FavField
-class FavField extends SearchCriteria {
-  FavField(this.favFB) {
+// region HistoryField
+class HistoryField extends SearchCriteria {
+  HistoryField(this.historyFB) {
     param = DbParameter();
   }
   DbParameter param;
   String _waitingNot = '';
-  FavFilterBuilder favFB;
+  HistoryFilterBuilder historyFB;
 
-  FavField get not {
+  HistoryField get not {
     _waitingNot = ' NOT ';
     return this;
   }
 
-  FavFilterBuilder equals(dynamic pValue) {
+  HistoryFilterBuilder equals(dynamic pValue) {
     param.expression = '=';
-    favFB._addedBlocks = _waitingNot == ''
-        ? setCriteria(pValue, favFB.parameters, param, SqlSyntax.EQuals,
-            favFB._addedBlocks)
-        : setCriteria(pValue, favFB.parameters, param, SqlSyntax.NotEQuals,
-            favFB._addedBlocks);
+    historyFB._addedBlocks = _waitingNot == ''
+        ? setCriteria(pValue, historyFB.parameters, param, SqlSyntax.EQuals,
+            historyFB._addedBlocks)
+        : setCriteria(pValue, historyFB.parameters, param, SqlSyntax.NotEQuals,
+            historyFB._addedBlocks);
     _waitingNot = '';
-    favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-        favFB._addedBlocks.retVal;
-    return favFB;
+    historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+        historyFB._addedBlocks.retVal;
+    return historyFB;
   }
 
-  FavFilterBuilder equalsOrNull(dynamic pValue) {
+  HistoryFilterBuilder equalsOrNull(dynamic pValue) {
     param.expression = '=';
-    favFB._addedBlocks = _waitingNot == ''
-        ? setCriteria(pValue, favFB.parameters, param, SqlSyntax.EQualsOrNull,
-            favFB._addedBlocks)
-        : setCriteria(pValue, favFB.parameters, param,
-            SqlSyntax.NotEQualsOrNull, favFB._addedBlocks);
+    historyFB._addedBlocks = _waitingNot == ''
+        ? setCriteria(pValue, historyFB.parameters, param,
+            SqlSyntax.EQualsOrNull, historyFB._addedBlocks)
+        : setCriteria(pValue, historyFB.parameters, param,
+            SqlSyntax.NotEQualsOrNull, historyFB._addedBlocks);
     _waitingNot = '';
-    favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-        favFB._addedBlocks.retVal;
-    return favFB;
+    historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+        historyFB._addedBlocks.retVal;
+    return historyFB;
   }
 
-  FavFilterBuilder isNull() {
-    favFB._addedBlocks = setCriteria(
+  HistoryFilterBuilder isNull() {
+    historyFB._addedBlocks = setCriteria(
         0,
-        favFB.parameters,
+        historyFB.parameters,
         param,
         SqlSyntax.IsNULL.replaceAll(SqlSyntax.notKeyword, _waitingNot),
-        favFB._addedBlocks);
+        historyFB._addedBlocks);
     _waitingNot = '';
-    favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-        favFB._addedBlocks.retVal;
-    return favFB;
+    historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+        historyFB._addedBlocks.retVal;
+    return historyFB;
   }
 
-  FavFilterBuilder contains(dynamic pValue) {
+  HistoryFilterBuilder contains(dynamic pValue) {
     if (pValue != null) {
-      favFB._addedBlocks = setCriteria(
+      historyFB._addedBlocks = setCriteria(
           '%${pValue.toString()}%',
-          favFB.parameters,
+          historyFB.parameters,
           param,
           SqlSyntax.Contains.replaceAll(SqlSyntax.notKeyword, _waitingNot),
-          favFB._addedBlocks);
+          historyFB._addedBlocks);
       _waitingNot = '';
-      favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-          favFB._addedBlocks.retVal;
+      historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+          historyFB._addedBlocks.retVal;
     }
-    return favFB;
+    return historyFB;
   }
 
-  FavFilterBuilder startsWith(dynamic pValue) {
+  HistoryFilterBuilder startsWith(dynamic pValue) {
     if (pValue != null) {
-      favFB._addedBlocks = setCriteria(
+      historyFB._addedBlocks = setCriteria(
           '${pValue.toString()}%',
-          favFB.parameters,
+          historyFB.parameters,
           param,
           SqlSyntax.Contains.replaceAll(SqlSyntax.notKeyword, _waitingNot),
-          favFB._addedBlocks);
+          historyFB._addedBlocks);
       _waitingNot = '';
-      favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-          favFB._addedBlocks.retVal;
-      favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-          favFB._addedBlocks.retVal;
+      historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+          historyFB._addedBlocks.retVal;
+      historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+          historyFB._addedBlocks.retVal;
     }
-    return favFB;
+    return historyFB;
   }
 
-  FavFilterBuilder endsWith(dynamic pValue) {
+  HistoryFilterBuilder endsWith(dynamic pValue) {
     if (pValue != null) {
-      favFB._addedBlocks = setCriteria(
+      historyFB._addedBlocks = setCriteria(
           '%${pValue.toString()}',
-          favFB.parameters,
+          historyFB.parameters,
           param,
           SqlSyntax.Contains.replaceAll(SqlSyntax.notKeyword, _waitingNot),
-          favFB._addedBlocks);
+          historyFB._addedBlocks);
       _waitingNot = '';
-      favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-          favFB._addedBlocks.retVal;
+      historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+          historyFB._addedBlocks.retVal;
     }
-    return favFB;
+    return historyFB;
   }
 
-  FavFilterBuilder between(dynamic pFirst, dynamic pLast) {
+  HistoryFilterBuilder between(dynamic pFirst, dynamic pLast) {
     if (pFirst != null && pLast != null) {
-      favFB._addedBlocks = setCriteria(
+      historyFB._addedBlocks = setCriteria(
           pFirst,
-          favFB.parameters,
+          historyFB.parameters,
           param,
           SqlSyntax.Between.replaceAll(SqlSyntax.notKeyword, _waitingNot),
-          favFB._addedBlocks,
+          historyFB._addedBlocks,
           pLast);
     } else if (pFirst != null) {
       if (_waitingNot != '') {
-        favFB._addedBlocks = setCriteria(pFirst, favFB.parameters, param,
-            SqlSyntax.LessThan, favFB._addedBlocks);
+        historyFB._addedBlocks = setCriteria(pFirst, historyFB.parameters,
+            param, SqlSyntax.LessThan, historyFB._addedBlocks);
       } else {
-        favFB._addedBlocks = setCriteria(pFirst, favFB.parameters, param,
-            SqlSyntax.GreaterThanOrEquals, favFB._addedBlocks);
+        historyFB._addedBlocks = setCriteria(pFirst, historyFB.parameters,
+            param, SqlSyntax.GreaterThanOrEquals, historyFB._addedBlocks);
       }
     } else if (pLast != null) {
       if (_waitingNot != '') {
-        favFB._addedBlocks = setCriteria(pLast, favFB.parameters, param,
-            SqlSyntax.GreaterThan, favFB._addedBlocks);
+        historyFB._addedBlocks = setCriteria(pLast, historyFB.parameters, param,
+            SqlSyntax.GreaterThan, historyFB._addedBlocks);
       } else {
-        favFB._addedBlocks = setCriteria(pLast, favFB.parameters, param,
-            SqlSyntax.LessThanOrEquals, favFB._addedBlocks);
+        historyFB._addedBlocks = setCriteria(pLast, historyFB.parameters, param,
+            SqlSyntax.LessThanOrEquals, historyFB._addedBlocks);
       }
     }
     _waitingNot = '';
-    favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-        favFB._addedBlocks.retVal;
-    return favFB;
+    historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+        historyFB._addedBlocks.retVal;
+    return historyFB;
   }
 
-  FavFilterBuilder greaterThan(dynamic pValue) {
+  HistoryFilterBuilder greaterThan(dynamic pValue) {
     param.expression = '>';
-    favFB._addedBlocks = _waitingNot == ''
-        ? setCriteria(pValue, favFB.parameters, param, SqlSyntax.GreaterThan,
-            favFB._addedBlocks)
-        : setCriteria(pValue, favFB.parameters, param,
-            SqlSyntax.LessThanOrEquals, favFB._addedBlocks);
+    historyFB._addedBlocks = _waitingNot == ''
+        ? setCriteria(pValue, historyFB.parameters, param,
+            SqlSyntax.GreaterThan, historyFB._addedBlocks)
+        : setCriteria(pValue, historyFB.parameters, param,
+            SqlSyntax.LessThanOrEquals, historyFB._addedBlocks);
     _waitingNot = '';
-    favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-        favFB._addedBlocks.retVal;
-    return favFB;
+    historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+        historyFB._addedBlocks.retVal;
+    return historyFB;
   }
 
-  FavFilterBuilder lessThan(dynamic pValue) {
+  HistoryFilterBuilder lessThan(dynamic pValue) {
     param.expression = '<';
-    favFB._addedBlocks = _waitingNot == ''
-        ? setCriteria(pValue, favFB.parameters, param, SqlSyntax.LessThan,
-            favFB._addedBlocks)
-        : setCriteria(pValue, favFB.parameters, param,
-            SqlSyntax.GreaterThanOrEquals, favFB._addedBlocks);
+    historyFB._addedBlocks = _waitingNot == ''
+        ? setCriteria(pValue, historyFB.parameters, param, SqlSyntax.LessThan,
+            historyFB._addedBlocks)
+        : setCriteria(pValue, historyFB.parameters, param,
+            SqlSyntax.GreaterThanOrEquals, historyFB._addedBlocks);
     _waitingNot = '';
-    favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-        favFB._addedBlocks.retVal;
-    return favFB;
+    historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+        historyFB._addedBlocks.retVal;
+    return historyFB;
   }
 
-  FavFilterBuilder greaterThanOrEquals(dynamic pValue) {
+  HistoryFilterBuilder greaterThanOrEquals(dynamic pValue) {
     param.expression = '>=';
-    favFB._addedBlocks = _waitingNot == ''
-        ? setCriteria(pValue, favFB.parameters, param,
-            SqlSyntax.GreaterThanOrEquals, favFB._addedBlocks)
-        : setCriteria(pValue, favFB.parameters, param, SqlSyntax.LessThan,
-            favFB._addedBlocks);
+    historyFB._addedBlocks = _waitingNot == ''
+        ? setCriteria(pValue, historyFB.parameters, param,
+            SqlSyntax.GreaterThanOrEquals, historyFB._addedBlocks)
+        : setCriteria(pValue, historyFB.parameters, param, SqlSyntax.LessThan,
+            historyFB._addedBlocks);
     _waitingNot = '';
-    favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-        favFB._addedBlocks.retVal;
-    return favFB;
+    historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+        historyFB._addedBlocks.retVal;
+    return historyFB;
   }
 
-  FavFilterBuilder lessThanOrEquals(dynamic pValue) {
+  HistoryFilterBuilder lessThanOrEquals(dynamic pValue) {
     param.expression = '<=';
-    favFB._addedBlocks = _waitingNot == ''
-        ? setCriteria(pValue, favFB.parameters, param,
-            SqlSyntax.LessThanOrEquals, favFB._addedBlocks)
-        : setCriteria(pValue, favFB.parameters, param, SqlSyntax.GreaterThan,
-            favFB._addedBlocks);
+    historyFB._addedBlocks = _waitingNot == ''
+        ? setCriteria(pValue, historyFB.parameters, param,
+            SqlSyntax.LessThanOrEquals, historyFB._addedBlocks)
+        : setCriteria(pValue, historyFB.parameters, param,
+            SqlSyntax.GreaterThan, historyFB._addedBlocks);
     _waitingNot = '';
-    favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-        favFB._addedBlocks.retVal;
-    return favFB;
+    historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+        historyFB._addedBlocks.retVal;
+    return historyFB;
   }
 
-  FavFilterBuilder inValues(dynamic pValue) {
-    favFB._addedBlocks = setCriteria(
+  HistoryFilterBuilder inValues(dynamic pValue) {
+    historyFB._addedBlocks = setCriteria(
         pValue,
-        favFB.parameters,
+        historyFB.parameters,
         param,
         SqlSyntax.IN.replaceAll(SqlSyntax.notKeyword, _waitingNot),
-        favFB._addedBlocks);
+        historyFB._addedBlocks);
     _waitingNot = '';
-    favFB._addedBlocks.needEndBlock[favFB._blockIndex] =
-        favFB._addedBlocks.retVal;
-    return favFB;
+    historyFB._addedBlocks.needEndBlock[historyFB._blockIndex] =
+        historyFB._addedBlocks.retVal;
+    return historyFB;
   }
 }
-// endregion FavField
+// endregion HistoryField
 
-// region FavFilterBuilder
-class FavFilterBuilder extends SearchCriteria {
-  FavFilterBuilder(Fav obj) {
+// region HistoryFilterBuilder
+class HistoryFilterBuilder extends SearchCriteria {
+  HistoryFilterBuilder(History obj) {
     whereString = '';
     qparams = QueryParams();
     parameters = <DbParameter>[];
@@ -670,13 +667,13 @@ class FavFilterBuilder extends SearchCriteria {
   int _blockIndex = 0;
   List<DbParameter> parameters;
   List<String> orderByList;
-  Fav _obj;
+  History _obj;
   QueryParams qparams;
   int _pagesize;
   int _page;
 
   /// put the sql keyword 'AND'
-  FavFilterBuilder get and {
+  HistoryFilterBuilder get and {
     if (parameters.isNotEmpty) {
       parameters[parameters.length - 1].wOperator = ' AND ';
     }
@@ -684,7 +681,7 @@ class FavFilterBuilder extends SearchCriteria {
   }
 
   /// put the sql keyword 'OR'
-  FavFilterBuilder get or {
+  HistoryFilterBuilder get or {
     if (parameters.isNotEmpty) {
       parameters[parameters.length - 1].wOperator = ' OR ';
     }
@@ -692,18 +689,21 @@ class FavFilterBuilder extends SearchCriteria {
   }
 
   /// open parentheses
-  FavFilterBuilder get startBlock {
+  HistoryFilterBuilder get startBlock {
     _addedBlocks.waitingStartBlock.add(true);
     _addedBlocks.needEndBlock.add(false);
     _blockIndex++;
-    if (_blockIndex > 1) _addedBlocks.needEndBlock[_blockIndex - 1] = true;
+    if (_blockIndex > 1) {
+      _addedBlocks.needEndBlock[_blockIndex - 1] = true;
+    }
     return this;
   }
 
   /// String whereCriteria, write raw query without 'where' keyword. Like this: 'field1 like 'test%' and field2 = 3'
-  FavFilterBuilder where(String whereCriteria, {dynamic parameterValue}) {
+  HistoryFilterBuilder where(String whereCriteria, {dynamic parameterValue}) {
     if (whereCriteria != null && whereCriteria != '') {
-      final DbParameter param = DbParameter();
+      final DbParameter param =
+          DbParameter(columnName: parameterValue == null ? null : '');
       _addedBlocks = setCriteria(parameterValue ?? 0, parameters, param,
           '($whereCriteria)', _addedBlocks);
       _addedBlocks.needEndBlock[_blockIndex] = _addedBlocks.retVal;
@@ -714,14 +714,18 @@ class FavFilterBuilder extends SearchCriteria {
   /// page = page number,
   ///
   /// pagesize = row(s) per page
-  FavFilterBuilder page(int page, int pagesize) {
-    if (page > 0) _page = page;
-    if (pagesize > 0) _pagesize = pagesize;
+  HistoryFilterBuilder page(int page, int pagesize) {
+    if (page > 0) {
+      _page = page;
+    }
+    if (pagesize > 0) {
+      _pagesize = pagesize;
+    }
     return this;
   }
 
   /// int count = LIMIT
-  FavFilterBuilder top(int count) {
+  HistoryFilterBuilder top(int count) {
     if (count > 0) {
       _pagesize = count;
     }
@@ -729,7 +733,7 @@ class FavFilterBuilder extends SearchCriteria {
   }
 
   /// close parentheses
-  FavFilterBuilder get endBlock {
+  HistoryFilterBuilder get endBlock {
     if (_addedBlocks.needEndBlock[_blockIndex]) {
       parameters[parameters.length - 1].whereString += ' ) ';
     }
@@ -744,13 +748,15 @@ class FavFilterBuilder extends SearchCriteria {
   /// Example 1: argFields='name, date'
   ///
   /// Example 2: argFields = ['name', 'date']
-  FavFilterBuilder orderBy(dynamic argFields) {
+  HistoryFilterBuilder orderBy(dynamic argFields) {
     if (argFields != null) {
       if (argFields is String) {
         orderByList.add(argFields);
       } else {
         for (String s in argFields as List<String>) {
-          if (s != null && s != '') orderByList.add(' $s ');
+          if (s != null && s != '') {
+            orderByList.add(' $s ');
+          }
         }
       }
     }
@@ -762,13 +768,15 @@ class FavFilterBuilder extends SearchCriteria {
   /// Example 1: argFields='field1, field2'
   ///
   /// Example 2: argFields = ['field1', 'field2']
-  FavFilterBuilder orderByDesc(dynamic argFields) {
+  HistoryFilterBuilder orderByDesc(dynamic argFields) {
     if (argFields != null) {
       if (argFields is String) {
         orderByList.add('$argFields desc ');
       } else {
         for (String s in argFields as List<String>) {
-          if (s != null && s != '') orderByList.add(' $s desc ');
+          if (s != null && s != '') {
+            orderByList.add(' $s desc ');
+          }
         }
       }
     }
@@ -780,59 +788,56 @@ class FavFilterBuilder extends SearchCriteria {
   /// Example 1: argFields='field1, field2'
   ///
   /// Example 2: argFields = ['field1', 'field2']
-  FavFilterBuilder groupBy(dynamic argFields) {
+  HistoryFilterBuilder groupBy(dynamic argFields) {
     if (argFields != null) {
       if (argFields is String) {
         groupByList.add(' $argFields ');
       } else {
         for (String s in argFields as List<String>) {
-          if (s != null && s != '') groupByList.add(' $s ');
+          if (s != null && s != '') {
+            groupByList.add(' $s ');
+          }
         }
       }
     }
     return this;
   }
 
-  FavField setField(FavField field, String colName, DbType dbtype) {
-    return FavField(this)
+  HistoryField setField(HistoryField field, String colName, DbType dbtype) {
+    return HistoryField(this)
       ..param = DbParameter(
           dbType: dbtype,
           columnName: colName,
           wStartBlock: _addedBlocks.waitingStartBlock[_blockIndex]);
   }
 
-  FavField _id;
-  FavField get id {
+  HistoryField _id;
+  HistoryField get id {
     return _id = setField(_id, 'id', DbType.integer);
   }
 
-  FavField _type;
-  FavField get type {
-    return _type = setField(_type, 'type', DbType.text);
-  }
-
-  FavField _title;
-  FavField get title {
+  HistoryField _title;
+  HistoryField get title {
     return _title = setField(_title, 'title', DbType.text);
   }
 
-  FavField _tag;
-  FavField get tag {
-    return _tag = setField(_tag, 'tag', DbType.text);
-  }
-
-  FavField _url;
-  FavField get url {
+  HistoryField _url;
+  HistoryField get url {
     return _url = setField(_url, 'url', DbType.text);
   }
 
-  FavField _create_at;
-  FavField get create_at {
+  HistoryField _num;
+  HistoryField get num {
+    return _num = setField(_num, 'num', DbType.integer);
+  }
+
+  HistoryField _create_at;
+  HistoryField get create_at {
     return _create_at = setField(_create_at, 'create_at', DbType.datetime);
   }
 
-  FavField _isDeleted;
-  FavField get isDeleted {
+  HistoryField _isDeleted;
+  HistoryField get isDeleted {
     return _isDeleted = setField(_isDeleted, 'isDeleted', DbType.bool);
   }
 
@@ -858,7 +863,11 @@ class FavFilterBuilder extends SearchCriteria {
               .toString();
           whereString += param.whereString
               .replaceAll('{field}', param.columnName)
-              .replaceAll('?', param.value.toString());
+              .replaceAll(
+                  '?',
+                  param.value is String
+                      ? '\'${param.value.toString()}\''
+                      : param.value.toString());
           param.value = null;
         } else {
           whereString +=
@@ -885,18 +894,18 @@ class FavFilterBuilder extends SearchCriteria {
               break;
             default:
           }
+          if (param.value != null) {
+            whereArguments.add(param.value);
+          }
+          if (param.value2 != null) {
+            whereArguments.add(param.value2);
+          }
         }
       } else {
         whereString += param.whereString;
       }
-      if (param.value != null) {
-        whereArguments.add(param.value);
-      }
-      if (param.value2 != null) {
-        whereArguments.add(param.value2);
-      }
     }
-    if (Fav._softDeleteActivated) {
+    if (History._softDeleteActivated) {
       if (whereString != '') {
         whereString =
             '${!_getIsDeleted ? 'ifnull(isDeleted,0)=0 AND' : ''} ($whereString)';
@@ -914,26 +923,27 @@ class FavFilterBuilder extends SearchCriteria {
       ..orderBy = orderByList.join(',');
   }
 
-  /// Deletes List<Fav> bulk by query
+  /// Deletes List<History> bulk by query
   ///
   /// <returns>BoolResult res.success=Deleted, not res.success=Can not deleted
   Future<BoolResult> delete([bool hardDelete = false]) async {
     _buildParameters();
     var r = BoolResult();
 
-    if (Fav._softDeleteActivated && !hardDelete) {
-      r = await _obj._mnFav.updateBatch(qparams, {'isDeleted': 1});
+    if (History._softDeleteActivated && !hardDelete) {
+      r = await _obj._mnHistory.updateBatch(qparams, {'isDeleted': 1});
     } else {
-      r = await _obj._mnFav.delete(qparams);
+      r = await _obj._mnHistory.delete(qparams);
     }
     return r;
   }
 
+  /// Recover List<History> bulk by query
   Future<BoolResult> recover() async {
     _getIsDeleted = true;
     _buildParameters();
-    print('SQFENTITIY: recover Fav bulk invoked');
-    return _obj._mnFav.updateBatch(qparams, {'isDeleted': 0});
+    print('SQFENTITIY: recover History bulk invoked');
+    return _obj._mnHistory.updateBatch(qparams, {'isDeleted': 0});
   }
 
   /// using:
@@ -945,12 +955,12 @@ class FavFilterBuilder extends SearchCriteria {
     _buildParameters();
     if (qparams.limit > 0 || qparams.offset > 0) {
       qparams.whereString =
-          'id IN (SELECT id from fav ${qparams.whereString.isNotEmpty ? 'WHERE ${qparams.whereString}' : ''}${qparams.limit > 0 ? ' LIMIT ${qparams.limit}' : ''}${qparams.offset > 0 ? ' OFFSET ${qparams.offset}' : ''})';
+          'id IN (SELECT id from history ${qparams.whereString.isNotEmpty ? 'WHERE ${qparams.whereString}' : ''}${qparams.limit > 0 ? ' LIMIT ${qparams.limit}' : ''}${qparams.offset > 0 ? ' OFFSET ${qparams.offset}' : ''})';
     }
-    return _obj._mnFav.updateBatch(qparams, values);
+    return _obj._mnHistory.updateBatch(qparams, values);
   }
 
-  /// This method always returns Fav Obj if exist, otherwise returns null
+  /// This method always returns History Obj if exist, otherwise returns null
   ///
   /// bool preload: if true, loads all related child objects (Set preload to true if you want to load all fields related to child or parent)
   ///
@@ -963,19 +973,19 @@ class FavFilterBuilder extends SearchCriteria {
   /// bool loadParents: if true, loads all parent objects until the object has no parent
 
   ///
-  /// <returns>List<Fav>
-  Future<Fav> toSingle(
+  /// <returns>List<History>
+  Future<History> toSingle(
       {bool preload = false,
       List<String> preloadFields,
       bool loadParents = false,
       List<String> loadedFields}) async {
     _pagesize = 1;
     _buildParameters();
-    final objFuture = _obj._mnFav.toList(qparams);
+    final objFuture = _obj._mnHistory.toList(qparams);
     final data = await objFuture;
-    Fav obj;
+    History obj;
     if (data.isNotEmpty) {
-      obj = Fav.fromMap(data[0] as Map<String, dynamic>);
+      obj = History.fromMap(data[0] as Map<String, dynamic>);
     } else {
       obj = null;
     }
@@ -985,18 +995,18 @@ class FavFilterBuilder extends SearchCriteria {
   /// This method returns int.
   ///
   /// <returns>int
-  Future<int> toCount([VoidCallback Function(int c) favCount]) async {
+  Future<int> toCount([VoidCallback Function(int c) historyCount]) async {
     _buildParameters();
     qparams.selectColumns = ['COUNT(1) AS CNT'];
-    final favsFuture = await _obj._mnFav.toList(qparams);
-    final int count = favsFuture[0]['CNT'] as int;
-    if (favCount != null) {
-      favCount(count);
+    final historiesFuture = await _obj._mnHistory.toList(qparams);
+    final int count = historiesFuture[0]['CNT'] as int;
+    if (historyCount != null) {
+      historyCount(count);
     }
     return count;
   }
 
-  /// This method returns List<Fav>.
+  /// This method returns List<History>.
   ///
   /// bool preload: if true, loads all related child objects (Set preload to true if you want to load all fields related to child or parent)
   ///
@@ -1009,19 +1019,20 @@ class FavFilterBuilder extends SearchCriteria {
   /// bool loadParents: if true, loads all parent objects until the object has no parent
 
   ///
-  /// <returns>List<Fav>
-  Future<List<Fav>> toList(
+  /// <returns>List<History>
+  Future<List<History>> toList(
       {bool preload = false,
       List<String> preloadFields,
       bool loadParents = false,
       List<String> loadedFields}) async {
     final data = await toMapList();
-    final List<Fav> favsData = await Fav.fromMapList(data,
+    final List<History> historiesData = await History.fromMapList(data,
         preload: preload,
         preloadFields: preloadFields,
         loadParents: loadParents,
-        loadedFields: loadedFields);
-    return favsData;
+        loadedFields: loadedFields,
+        setDefaultValues: qparams.selectColumns == null);
+    return historiesData;
   }
 
   /// This method returns Json String
@@ -1039,7 +1050,7 @@ class FavFilterBuilder extends SearchCriteria {
     final list = <dynamic>[];
     final data = await toList();
     for (var o in data) {
-      list.add(await o.toMapWithChilds(false, true));
+      list.add(await o.toMapWithChildren(false, true));
     }
     return json.encode(list);
   }
@@ -1049,72 +1060,18 @@ class FavFilterBuilder extends SearchCriteria {
   /// <returns>List<dynamic>
   Future<List<dynamic>> toMapList() async {
     _buildParameters();
-    return await _obj._mnFav.toList(qparams);
-  }
-
-  /// Returns List<DropdownMenuItem<Fav>>
-  Future<List<DropdownMenuItem<Fav>>> toDropDownMenu(String displayTextColumn,
-      [VoidCallback Function(List<DropdownMenuItem<Fav>> o)
-          dropDownMenu]) async {
-    _buildParameters();
-    final favsFuture = _obj._mnFav.toList(qparams);
-
-    final data = await favsFuture;
-    final int count = data.length;
-    final List<DropdownMenuItem<Fav>> items = []..add(DropdownMenuItem(
-        value: Fav(),
-        child: Text('Select Fav'),
-      ));
-    for (int i = 0; i < count; i++) {
-      items.add(
-        DropdownMenuItem(
-          value: Fav.fromMap(data[i] as Map<String, dynamic>),
-          child: Text(data[i][displayTextColumn].toString()),
-        ),
-      );
-    }
-    if (dropDownMenu != null) {
-      dropDownMenu(items);
-    }
-    return items;
-  }
-
-  /// Returns List<DropdownMenuItem<int>>
-  Future<List<DropdownMenuItem<int>>> toDropDownMenuInt(
-      String displayTextColumn,
-      [VoidCallback Function(List<DropdownMenuItem<int>> o)
-          dropDownMenu]) async {
-    _buildParameters();
-    qparams.selectColumns = ['id', displayTextColumn];
-    final favsFuture = _obj._mnFav.toList(qparams);
-
-    final data = await favsFuture;
-    final int count = data.length;
-    final List<DropdownMenuItem<int>> items = []..add(DropdownMenuItem(
-        value: 0,
-        child: Text('Select Fav'),
-      ));
-    for (int i = 0; i < count; i++) {
-      items.add(
-        DropdownMenuItem(
-          value: data[i]['id'] as int,
-          child: Text(data[i][displayTextColumn].toString()),
-        ),
-      );
-    }
-    if (dropDownMenu != null) {
-      dropDownMenu(items);
-    }
-    return items;
+    return await _obj._mnHistory.toList(qparams);
   }
 
   /// This method returns Primary Key List<int>.
   /// <returns>List<int>
   Future<List<int>> toListPrimaryKey([bool buildParameters = true]) async {
-    if (buildParameters) _buildParameters();
+    if (buildParameters) {
+      _buildParameters();
+    }
     final List<int> idData = <int>[];
     qparams.selectColumns = ['id'];
-    final idFuture = await _obj._mnFav.toList(qparams);
+    final idFuture = await _obj._mnHistory.toList(qparams);
 
     final int count = idFuture.length;
     for (int i = 0; i < count; i++) {
@@ -1129,7 +1086,7 @@ class FavFilterBuilder extends SearchCriteria {
   Future<List<dynamic>> toListObject() async {
     _buildParameters();
 
-    final objectFuture = _obj._mnFav.toList(qparams);
+    final objectFuture = _obj._mnHistory.toList(qparams);
 
     final List<dynamic> objectsData = <dynamic>[];
     final data = await objectFuture;
@@ -1142,12 +1099,12 @@ class FavFilterBuilder extends SearchCriteria {
 
   /// Returns List<String> for selected first column
   ///
-  /// Sample usage: await Fav.select(columnsToSelect: ['columnName']).toListString()
+  /// Sample usage: await History.select(columnsToSelect: ['columnName']).toListString()
   Future<List<String>> toListString(
       [VoidCallback Function(List<String> o) listString]) async {
     _buildParameters();
 
-    final objectFuture = _obj._mnFav.toList(qparams);
+    final objectFuture = _obj._mnHistory.toList(qparams);
 
     final List<String> objectsData = <String>[];
     final data = await objectFuture;
@@ -1161,18 +1118,13 @@ class FavFilterBuilder extends SearchCriteria {
     return objectsData;
   }
 }
-// endregion FavFilterBuilder
+// endregion HistoryFilterBuilder
 
-// region FavFields
-class FavFields {
+// region HistoryFields
+class HistoryFields {
   static TableField _fId;
   static TableField get id {
     return _fId = _fId ?? SqlSyntax.setField(_fId, 'id', DbType.integer);
-  }
-
-  static TableField _fType;
-  static TableField get type {
-    return _fType = _fType ?? SqlSyntax.setField(_fType, 'type', DbType.text);
   }
 
   static TableField _fTitle;
@@ -1181,14 +1133,14 @@ class FavFields {
         _fTitle ?? SqlSyntax.setField(_fTitle, 'title', DbType.text);
   }
 
-  static TableField _fTag;
-  static TableField get tag {
-    return _fTag = _fTag ?? SqlSyntax.setField(_fTag, 'tag', DbType.text);
-  }
-
   static TableField _fUrl;
   static TableField get url {
     return _fUrl = _fUrl ?? SqlSyntax.setField(_fUrl, 'url', DbType.text);
+  }
+
+  static TableField _fNum;
+  static TableField get num {
+    return _fNum = _fNum ?? SqlSyntax.setField(_fNum, 'num', DbType.integer);
   }
 
   static TableField _fCreate_at;
@@ -1203,26 +1155,22 @@ class FavFields {
         SqlSyntax.setField(_fIsDeleted, 'isDeleted', DbType.integer);
   }
 }
-// endregion FavFields
+// endregion HistoryFields
 
-//region FavManager
-class FavManager extends SqfEntityProvider {
-  FavManager()
-      : super(FavoriteDbModel(),
+//region HistoryManager
+class HistoryManager extends SqfEntityProvider {
+  HistoryManager()
+      : super(HistoryDbModel(),
             tableName: _tableName,
             primaryKeyList: _primaryKeyList,
             whereStr: _whereStr);
-  static String _tableName = 'fav';
-  //static String _colId = 'id';
-  static List<String> _primaryKeyList = ['id'];
-  static String _whereStr = 'id=?';
+  static final String _tableName = 'history';
+  static final List<String> _primaryKeyList = ['id'];
+  static final String _whereStr = 'id=?';
 }
 
-//endregion FavManager
-class FavoriteDbModelSequenceManager extends SqfEntityProvider {
-  FavoriteDbModelSequenceManager() : super(FavoriteDbModel());
+//endregion HistoryManager
+class HistoryDbModelSequenceManager extends SqfEntityProvider {
+  HistoryDbModelSequenceManager() : super(HistoryDbModel());
 }
 // END OF ENTITIES
-
-// BEGIN CONTROLLERS
-// END OF CONTROLLERS
